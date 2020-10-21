@@ -1,3 +1,4 @@
+import 'package:bitcoin_ticker/network.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -53,6 +54,7 @@ class _PriceScreenState extends State<PriceScreen> {
         children: pickerItems);
   }
 
+  // ignore: missing_return
   Widget getPicker() {
     if (Platform.isIOS) {
       return iOSPicker();
@@ -61,8 +63,14 @@ class _PriceScreenState extends State<PriceScreen> {
     }
   }
 
+  void networkData() async {
+    var data = await NetworkHelper().conversionRate();
+    print(data);
+  }
+
   @override
   Widget build(BuildContext context) {
+    networkData();
     return Scaffold(
       appBar: AppBar(
         title: Text('🤑 Coin Ticker'),
