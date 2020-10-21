@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'coin_data.dart';
 import 'coin_data.dart';
 import 'coin_data.dart';
 import 'coin_data.dart';
@@ -11,13 +13,13 @@ class PriceScreen extends StatefulWidget {
 }
 
 class _PriceScreenState extends State<PriceScreen> {
-  String selectedCurrency;
+  String selectedCurrency = 'USD';
 
-  List<DropdownMenuItem<String>> getDropDownItems() {
+  DropdownButton<String> androidDropDown() {
     // for (var i = 0; i < currenciesList.length; i++) {
     //   print(currenciesList[i]);
     // }
-    selectedCurrency = currenciesList.first;
+    // selectedCurrency = currenciesList.first;
     List<DropdownMenuItem<String>> list = [];
     for (String currency in currenciesList) {
       var item = DropdownMenuItem(
@@ -26,7 +28,32 @@ class _PriceScreenState extends State<PriceScreen> {
       );
       list.add(item);
     }
-    return list;
+
+    return DropdownButton<String>(
+      value: selectedCurrency,
+      items: list,
+      onChanged: (value) {
+        print(value);
+        setState(() {
+          selectedCurrency = value;
+        });
+      },
+    );
+  }
+
+  CupertinoPicker iOSPicker() {
+    List<Text> pickerItems = [];
+    for (String currency in currenciesList) {
+      pickerItems.add(Text(currency));
+    }
+
+    return CupertinoPicker(
+        backgroundColor: Colors.lightBlue,
+        itemExtent: 32.0,
+        onSelectedItemChanged: (selectedItem) {
+          print(selectedItem);
+        },
+        children: pickerItems);
   }
 
   @override
@@ -65,15 +92,8 @@ class _PriceScreenState extends State<PriceScreen> {
             alignment: Alignment.center,
             padding: EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlue,
-            child: DropdownButton<String>(
-              value: selectedCurrency,
-              items: getDropDownItems(),
-              onChanged: (value) {
-                setState(() {
-                  selectedCurrency = value;
-                });
-              },
-            ),
+            // child: androidDropDown(),
+            child: iOSPicker(),
           ),
         ],
       ),
