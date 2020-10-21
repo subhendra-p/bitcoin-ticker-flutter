@@ -2,10 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'coin_data.dart';
-import 'coin_data.dart';
-import 'coin_data.dart';
-import 'coin_data.dart';
-import 'coin_data.dart';
+import 'dart:io' show Platform;
 
 class PriceScreen extends StatefulWidget {
   @override
@@ -56,6 +53,14 @@ class _PriceScreenState extends State<PriceScreen> {
         children: pickerItems);
   }
 
+  Widget getPicker() {
+    if (Platform.isIOS) {
+      return iOSPicker();
+    } else if (Platform.isAndroid) {
+      return androidDropDown();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -93,7 +98,7 @@ class _PriceScreenState extends State<PriceScreen> {
             padding: EdgeInsets.only(bottom: 30.0),
             color: Colors.lightBlue,
             // child: androidDropDown(),
-            child: iOSPicker(),
+            child: getPicker(),
           ),
         ],
       ),
