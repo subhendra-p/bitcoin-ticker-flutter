@@ -12,6 +12,7 @@ class PriceScreen extends StatefulWidget {
 
 class _PriceScreenState extends State<PriceScreen> {
   String selectedCurrency = 'USD';
+  String conversionRate = '';
 
   DropdownButton<String> androidDropDown() {
     // for (var i = 0; i < currenciesList.length; i++) {
@@ -63,14 +64,14 @@ class _PriceScreenState extends State<PriceScreen> {
     }
   }
 
-  void networkData() async {
-    var data = await NetworkHelper().conversionRate();
-    print(data);
+  void networkData(String currency) async {
+    var decodeData = await NetworkHelper().conversionRateCoin('USD');
+    print('response $decodeData');
   }
 
   @override
   Widget build(BuildContext context) {
-    networkData();
+    networkData(selectedCurrency);
     return Scaffold(
       appBar: AppBar(
         title: Text('🤑 Coin Ticker'),
@@ -90,7 +91,7 @@ class _PriceScreenState extends State<PriceScreen> {
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 15.0, horizontal: 28.0),
                 child: Text(
-                  '1 BTC = ? USD',
+                  '1 BTC = $conversionRate $selectedCurrency',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 20.0,
