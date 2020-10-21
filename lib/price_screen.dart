@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'coin_data.dart';
 import 'dart:io' show Platform;
 
+import 'coin_data.dart';
+
 class PriceScreen extends StatefulWidget {
   @override
   _PriceScreenState createState() => _PriceScreenState();
@@ -35,6 +37,7 @@ class _PriceScreenState extends State<PriceScreen> {
         print(value);
         setState(() {
           selectedCurrency = value;
+          networkData(selectedCurrency);
         });
       },
     );
@@ -51,27 +54,42 @@ class _PriceScreenState extends State<PriceScreen> {
         itemExtent: 32.0,
         onSelectedItemChanged: (selectedItem) {
           print(selectedItem);
+          setState(() {
+            selectedCurrency = currenciesList[selectedItem];
+            networkData(selectedCurrency);
+          });
         },
         children: pickerItems);
   }
 
   // ignore: missing_return
   Widget getPicker() {
-    if (Platform.isIOS) {
-      return iOSPicker();
-    } else if (Platform.isAndroid) {
-      return androidDropDown();
-    }
+    // if (Platform.isIOS) {
+    //   return iOSPicker();
+    // } else if (Platform.isAndroid) {
+    //   return androidDropDown();
+    // }
+    return iOSPicker();
   }
 
   void networkData(String currency) async {
-    var decodeData = await NetworkHelper().conversionRateCoin('USD');
+    var decodeData = await NetworkHelper().conversionRateCoin(currency);
+    double value = decodeData['bpi'][currency]['rate_float'];
+    setState(() {
+      conversionRate = value.toString();
+    });
     print('response $decodeData');
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     networkData(selectedCurrency);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // networkData(selectedCurrency);
     return Scaffold(
       appBar: AppBar(
         title: Text('🤑 Coin Ticker'),
